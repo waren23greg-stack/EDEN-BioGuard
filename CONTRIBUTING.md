@@ -68,3 +68,24 @@ By submitting any contribution, you agree that:
 3. You have not copied code from any third party
 
 **Warren Greg — EDEN-BioGuard — All Rights Reserved 2026**
+
+---
+
+## Reporting Issues
+
+Open a GitHub Issue with:
+- Clear title
+- Steps to reproduce
+- Expected vs actual behaviour
+- Your environment (OS, Python version)
+
+---
+
+## Legal
+
+By submitting any contribution, you agree that:
+1. Warren Greg retains full ownership of all contributions
+2. You waive any claim to intellectual property rights
+3. You have not copied code from any third party
+
+**Warren Greg — EDEN-BioGuard — All Rights Reserved 2026**
