@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const RECIPIENT_GROUPS = [
   { value: "public", label: "Public Users" },
@@ -22,6 +22,7 @@ export default function UserCommunicationsInterface() {
   const [body, setBody] = useState("");
   const [sendStatus, setSendStatus] = useState("idle");
   const [statusText, setStatusText] = useState("No message sent yet.");
+  const sendTimeoutRef = useRef(null);
 
   const canSend = subject.trim().length > 0 && body.trim().length > 0 && recipients.length > 0;
 
@@ -56,18 +57,36 @@ export default function UserCommunicationsInterface() {
     setSendStatus("sending");
     setStatusText("Sending message...");
 
-    window.setTimeout(() => {
+    if (sendTimeoutRef.current) {
+      window.clearTimeout(sendTimeoutRef.current);
+    }
+
+    sendTimeoutRef.current = window.setTimeout(() => {
       setSendStatus("sent");
       setStatusText(`Message sent to ${recipients.length} recipient group(s).`);
+      sendTimeoutRef.current = null;
     }, 900);
   };
 
   const handleReset = () => {
+    if (sendTimeoutRef.current) {
+      window.clearTimeout(sendTimeoutRef.current);
+      sendTimeoutRef.current = null;
+    }
     setSubject("");
     setBody("");
     setSendStatus("idle");
     setStatusText("Composer reset. Ready for next communication.");
   };
+
+  useEffect(
+    () => () => {
+      if (sendTimeoutRef.current) {
+        window.clearTimeout(sendTimeoutRef.current);
+      }
+    },
+    []
+  );
 
   return (
     <section style={{ border: "1px solid #d0d7de", borderRadius: "8px", padding: "16px", maxWidth: "960px" }}>
