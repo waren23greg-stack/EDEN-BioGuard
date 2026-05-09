@@ -13,6 +13,7 @@ const MESSAGE_TYPES = [
   { value: "status_update", label: "Status Update" },
   { value: "resolution", label: "Resolution" },
 ];
+const MOCK_SEND_DELAY_MS = 900;
 
 export default function UserCommunicationsInterface() {
   const [messageType, setMessageType] = useState("incident_alert");
@@ -24,7 +25,9 @@ export default function UserCommunicationsInterface() {
   const [statusText, setStatusText] = useState("No message sent yet.");
   const sendTimeoutRef = useRef(null);
 
-  const canSend = subject.trim().length > 0 && body.trim().length > 0 && recipients.length > 0;
+  const trimmedSubject = subject.trim();
+  const trimmedBody = body.trim();
+  const canSend = trimmedSubject.length > 0 && trimmedBody.length > 0 && recipients.length > 0;
 
   const previewText = useMemo(() => {
     const recipientLabels = RECIPIENT_GROUPS.filter((group) => recipients.includes(group.value)).map((group) => group.label);
@@ -65,7 +68,7 @@ export default function UserCommunicationsInterface() {
       setSendStatus("sent");
       setStatusText(`Message sent to ${recipients.length} recipient group(s).`);
       sendTimeoutRef.current = null;
-    }, 900);
+    }, MOCK_SEND_DELAY_MS);
   };
 
   const handleReset = () => {
