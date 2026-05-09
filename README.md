@@ -44,6 +44,7 @@ flowchart TB
         A3 --> B1
         B1 --> B2[Threat Knowledge Graph]
         B1 --> B3[Attack Path Finder]
+        B1 --> B4[ThreatNet<br>22,083-parameter classifier]
     end
 
     subgraph L3["🧬 Ecological Layer (EDEN)"]
@@ -187,7 +188,7 @@ flowchart TB
 
 ---
 
-## Probabilistic Next Phase – PHASE 4
+## Phase 4 Development Roadmap
 
 Based on the current architectural gaps and the shared roadmap of both repositories, the following high‑probability extensions are proposed for the next development phase.
 
