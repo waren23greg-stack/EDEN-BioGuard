@@ -27,7 +27,7 @@ For any token-linked land/ecosystem incentive mechanism:
 2. **No discriminatory allocation:** allocation rules must be transparent and consistently applied.
 3. **Impact-linked fairness:** payouts should map to measurable ecological stewardship outcomes and verified participation.
 4. **Dispute pathway:** users/communities must have a documented challenge and appeals process.
-5. **Human oversight:** final high-impact determinations should include qualified human review, not automated-only decisions.
+5. **Human oversight:** determinations meeting any high-impact trigger must include qualified human review, not automated-only decisions. Suggested triggers: (a) disbursement value above a policy-set threshold, (b) decisions affecting a defined minimum land area, or (c) decisions affecting a defined minimum number of households/community members.
 
 ## 4) BioImpact Token Usage Restrictions
 
@@ -82,4 +82,3 @@ When token events intersect with public environmental alerts:
 2. Kenya Data Protection Act, 2019.
 3. Relevant Kenyan land and environmental law frameworks for legal counsel confirmation (e.g., Land Act, Community Land Act, EMCA context).
 4. Office of the Data Protection Commissioner (Kenya) guidance.
-

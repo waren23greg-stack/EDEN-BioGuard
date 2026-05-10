@@ -54,7 +54,7 @@
 - Show **Explicit Consent Banner** before enabling uploads of user-linked ecological data.
 - Show **Data Sharing Banner** before users access public-alert dashboards the first time.
 - Retain audit evidence of consent choice (timestamp, policy version, user ID hash).
-- Support clear language in English first, with Swahili version queued for public deployments.
+- Support clear language in English first, with Swahili version queued for public deployments (operational alignment with Kenya's official-language context; final legal requirement to be confirmed by counsel).
 
 ## Kenyan Constitutional & Legal Mapping (Implementation Notes)
 
@@ -77,4 +77,3 @@
 1. Constitution of Kenya (2010), Articles 10, 31, 40.
 2. Kenya Data Protection Act, 2019.
 3. Office of the Data Protection Commissioner (Kenya) implementation guidance.
-

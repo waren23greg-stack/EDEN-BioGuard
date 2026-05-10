@@ -49,7 +49,7 @@ Where applicable under Kenyan law and project governance, users may:
 - request deletion or restriction where legally permissible;
 - withdraw consent for optional processing activities.
 
-**Important:** Withdrawal does not automatically invalidate processing already undertaken under lawful obligations (e.g., incident audit or statutory recordkeeping).
+**Important:** Withdrawal does not automatically invalidate processing already undertaken under lawful obligations. In the Kenyan context, this may include mandatory incident/accountability record retention, audit-trail preservation, and other statutory/regulatory compliance records where deletion is not immediately permissible.
 
 ## 6) Retention & Security Commitments
 
@@ -88,4 +88,3 @@ EDEN-BioGuard will:
 1. Constitution of Kenya (2010), including Articles 10, 31, and 40.
 2. Kenya Data Protection Act, 2019.
 3. Office of the Data Protection Commissioner (Kenya) resources.
-
