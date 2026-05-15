@@ -4,11 +4,11 @@ This repository now includes a professional dashboard UI for unified **software 
 
 ## Files added
 
-- `/home/runner/work/EDEN-BioGuard/EDEN-BioGuard/dashboards/software_ecological_dashboard.html`
-- `/home/runner/work/EDEN-BioGuard/EDEN-BioGuard/dashboards/software_ecological_dashboard.js`
-- `/home/runner/work/EDEN-BioGuard/EDEN-BioGuard/dashboards/mistcoder-client.js`
-- `/home/runner/work/EDEN-BioGuard/EDEN-BioGuard/dashboards/dashboard.config.js`
-- `/home/runner/work/EDEN-BioGuard/EDEN-BioGuard/src/visualization/generate_dashboard_config.py`
+- `dashboards/software_ecological_dashboard.html`
+- `dashboards/software_ecological_dashboard.js`
+- `dashboards/mistcoder-client.js`
+- `dashboards/dashboard.config.js`
+- `src/visualization/generate_dashboard_config.py`
 
 ## Capabilities implemented
 
@@ -36,7 +36,7 @@ export MISTCODER_CACHE_TTL_MS="30000"
 Generate the runtime config file:
 
 ```bash
-cd /home/runner/work/EDEN-BioGuard/EDEN-BioGuard
+cd <project-root>
 python3 -m src.visualization.generate_dashboard_config
 ```
 
@@ -48,7 +48,7 @@ This writes:
 
 Open this file in a browser:
 
-- `/home/runner/work/EDEN-BioGuard/EDEN-BioGuard/dashboards/software_ecological_dashboard.html`
+- `dashboards/software_ecological_dashboard.html`
 
 ### Behavior
 
