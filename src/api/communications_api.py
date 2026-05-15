@@ -5,6 +5,7 @@ Live backend APIs for EDEN-BioGuard communications workflows.
 from __future__ import annotations
 
 import json
+import logging
 import os
 import threading
 import uuid
@@ -16,6 +17,8 @@ import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+
+logger = logging.getLogger(__name__)
 
 
 def utc_now_iso() -> str:
@@ -31,6 +34,18 @@ def default_store_path() -> Path:
     if configured:
         return Path(configured)
     return Path("data/communications/records.json")
+
+
+def allowed_origins() -> list[str]:
+    raw = os.getenv("EDEN_COMMUNICATIONS_ALLOWED_ORIGINS", "").strip()
+    if raw:
+        return [origin.strip() for origin in raw.split(",") if origin.strip()]
+    return [
+        "http://localhost",
+        "http://127.0.0.1",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ]
 
 
 RecipientGroup = Literal["public", "stakeholders", "regulators", "internal"]
@@ -107,11 +122,22 @@ class CommunicationsStore:
     def _load(self) -> dict:
         try:
             return json.loads(self.path.read_text(encoding="utf-8"))
-        except Exception:
+        except json.JSONDecodeError as exc:
+            logger.warning("Communications store JSON decode failed at %s: %s", self.path, exc)
+            return {"threads": {}}
+        except OSError as exc:
+            logger.warning("Communications store read failed at %s: %s", self.path, exc)
             return {"threads": {}}
 
     def _save(self, payload: dict) -> None:
         self.path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+
+    @staticmethod
+    def _merge_recipient_groups(
+        existing: list[RecipientGroup],
+        incoming: list[RecipientGroup],
+    ) -> list[RecipientGroup]:
+        return sorted(set(existing + list(incoming)))
 
     def send(self, req: SendCommunicationRequest) -> dict:
         with self._lock:
@@ -143,7 +169,10 @@ class CommunicationsStore:
             if req.severity is not None:
                 thread["severity"] = req.severity
 
-            merged_recipients = sorted(set(thread.get("recipientGroups", []) + list(req.recipients)))
+            merged_recipients = self._merge_recipient_groups(
+                thread.get("recipientGroups", []),
+                req.recipients,
+            )
             thread["recipientGroups"] = merged_recipients
 
             message = {
@@ -171,7 +200,9 @@ class CommunicationsStore:
             if thread is None:
                 return None
 
-            acknowledged_groups = sorted({ack["recipientGroup"] for ack in thread.get("acknowledgements", [])})
+            acknowledged_groups = sorted(
+                set([ack["recipientGroup"] for ack in thread.get("acknowledgements", [])])
+            )
             recipient_groups = sorted(set(thread.get("recipientGroups", [])))
             pending_groups = [group for group in recipient_groups if group not in acknowledged_groups]
 
@@ -207,6 +238,8 @@ class CommunicationsStore:
                 "acknowledgedAt": now,
             }
 
+            # Replace any existing acknowledgement from the same recipient group
+            # with the latest acknowledgement event.
             existing = [
                 ack
                 for ack in thread.get("acknowledgements", [])
@@ -223,8 +256,8 @@ app = FastAPI(title="EDEN-BioGuard Communications API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=allowed_origins(),
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -277,8 +310,7 @@ def acknowledge(referenceCode: str, req: AcknowledgeRequest) -> AcknowledgeRespo
 if __name__ == "__main__":
     uvicorn.run(
         "src.api.communications_api:app",
-        host=os.getenv("EDEN_COMMUNICATIONS_HOST", "0.0.0.0"),
+        host=os.getenv("EDEN_COMMUNICATIONS_HOST", "127.0.0.1"),
         port=int(os.getenv("EDEN_COMMUNICATIONS_PORT", "8080")),
         reload=False,
     )
-
