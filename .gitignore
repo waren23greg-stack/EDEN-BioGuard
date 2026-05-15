@@ -4,3 +4,4 @@ __pycache__/
 .env
 artifacts/
 *.joblib
+data/communications/records.json

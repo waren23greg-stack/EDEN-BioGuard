@@ -72,11 +72,13 @@ Before send, confirm:
 
 ## 6. Integration Notes for Engineering
 - Frontend component: `src/components/UserCommunicationsInterface.jsx`
-- Current send flow is mock/demo only (no backend integration yet).
-- Planned backend hooks:
+- Live backend API implemented at: `src/api/communications_api.py`
+- Available backend hooks:
   - `POST /api/communications/send`
   - `GET /api/communications/{referenceCode}/status`
   - `POST /api/communications/{referenceCode}/acknowledgements`
+- Run locally:
+  - `python -m src.api.communications_api`
 
 ## 7. Demo Incident Response Cycle
 1. Create public incident alert (status: `INVESTIGATING`, severity: `HIGH`).
