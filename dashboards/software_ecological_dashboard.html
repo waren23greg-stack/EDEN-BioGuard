@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EDEN-BioGuard | Software & Ecological Events Dashboard</title>
+    <style>
+      :root {
+        --bg: #09131f;
+        --panel: #122132;
+        --panel-soft: #182a3e;
+        --text: #e8f1fb;
+        --muted: #9cb3cc;
+        --accent: #3ea6ff;
+        --ok: #22c55e;
+        --warn: #f59e0b;
+        --danger: #ef4444;
+        --border: #27425f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: radial-gradient(circle at top, #11233a, var(--bg) 55%);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      .container {
+        width: min(1180px, 92vw);
+        margin: 0 auto;
+        padding: 24px 0 48px;
+      }
+
+      header {
+        margin-bottom: 18px;
+      }
+
+      h1 {
+        font-size: clamp(1.45rem, 2.6vw, 2rem);
+        margin: 0;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        margin-top: 6px;
+      }
+
+      .status-bar {
+        margin-top: 14px;
+        border: 1px solid var(--border);
+        background: rgba(18, 33, 50, 0.7);
+        border-radius: 10px;
+        padding: 10px 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .status-message {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      button,
+      select,
+      input {
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: #0f1f32;
+        color: var(--text);
+      }
+
+      button {
+        cursor: pointer;
+        padding: 8px 12px;
+      }
+
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+      }
+
+      .kpi-card,
+      .panel {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: rgba(18, 33, 50, 0.9);
+        backdrop-filter: blur(3px);
+      }
+
+      .kpi-card {
+        padding: 14px;
+      }
+
+      .kpi-label {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .kpi-value {
+        margin-top: 4px;
+        font-size: 1.6rem;
+        font-weight: 700;
+      }
+
+      .layout {
+        margin-top: 16px;
+        display: grid;
+        gap: 12px;
+        grid-template-columns: 1.1fr 1fr;
+      }
+
+      .panel {
+        padding: 14px;
+      }
+
+      .panel h2 {
+        margin: 0 0 12px;
+        font-size: 1.1rem;
+      }
+
+      .filters {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+
+      .filters label {
+        display: grid;
+        gap: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .timeline {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        max-height: 460px;
+        overflow: auto;
+      }
+
+      .event {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 10px;
+        background: var(--panel-soft);
+      }
+
+      .event-meta {
+        color: var(--muted);
+        font-size: 0.82rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .event-title {
+        margin: 6px 0;
+        font-size: 0.98rem;
+      }
+
+      .pill {
+        border-radius: 999px;
+        padding: 2px 8px;
+        font-size: 0.75rem;
+        border: 1px solid var(--border);
+      }
+
+      .severity-critical,
+      .severity-high {
+        color: #fecaca;
+        border-color: #7f1d1d;
+        background: rgba(127, 29, 29, 0.2);
+      }
+
+      .severity-medium {
+        color: #fde68a;
+        border-color: #78350f;
+        background: rgba(120, 53, 15, 0.2);
+      }
+
+      .severity-low {
+        color: #86efac;
+        border-color: #166534;
+        background: rgba(22, 101, 52, 0.2);
+      }
+
+      .map-placeholder {
+        min-height: 240px;
+        border: 1px dashed var(--border);
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        color: var(--muted);
+        text-align: center;
+        padding: 16px;
+      }
+
+      .state {
+        border: 1px dashed var(--border);
+        border-radius: 10px;
+        padding: 12px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .state.error {
+        color: #fecaca;
+        border-color: #7f1d1d;
+        background: rgba(127, 29, 29, 0.15);
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      @media (max-width: 900px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container" aria-label="Software and ecological events dashboard">
+      <header>
+        <h1>EDEN-BioGuard Event Dashboard</h1>
+        <p class="subtitle">
+          Unified monitoring for MISTCODER software security alerts and ecological/health incidents.
+        </p>
+        <div class="status-bar" role="status" aria-live="polite">
+          <div id="statusMessage" class="status-message">Preparing dashboard...</div>
+          <button id="refreshButton" type="button">Refresh now</button>
+        </div>
+      </header>
+
+      <section aria-label="Summary indicators" class="kpi-grid" id="kpiGrid"></section>
+
+      <section class="layout" aria-label="Dashboard detail panels">
+        <article class="panel" aria-label="Filters and map panel">
+          <h2>Filters</h2>
+          <form class="filters" id="filtersForm">
+            <label>
+              Start date
+              <input type="date" id="startDate" name="startDate" />
+            </label>
+            <label>
+              End date
+              <input type="date" id="endDate" name="endDate" />
+            </label>
+            <label>
+              Region / County
+              <select id="regionFilter" name="regionFilter">
+                <option value="">All regions</option>
+              </select>
+            </label>
+            <label>
+              Event type
+              <select id="eventTypeFilter" name="eventTypeFilter">
+                <option value="">All event types</option>
+              </select>
+            </label>
+            <label>
+              Severity
+              <select id="severityFilter" name="severityFilter">
+                <option value="">All severities</option>
+              </select>
+            </label>
+          </form>
+
+          <h2 style="margin-top: 16px">Map Panel</h2>
+          <div class="map-placeholder" role="img" aria-label="Map placeholder panel">
+            <div>
+              <strong>Map integration placeholder</strong><br />
+              Existing repo map output (`dashboards/btu_map.html`) can be linked/embedded here.
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" aria-label="Timeline and event feed panel">
+          <h2>Timeline / Event Feed</h2>
+          <div id="eventsState" class="state">Loading events...</div>
+          <ul class="timeline" id="timeline" hidden></ul>
+        </article>
+      </section>
+    </main>
+
+    <script src="./dashboard.config.js"></script>
+    <script type="module" src="./software_ecological_dashboard.js"></script>
+  </body>
+</html>
